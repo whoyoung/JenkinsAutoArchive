@@ -1,0 +1,216 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+# 
+default_platform(:ios)
+
+platform :ios do
+  desc "iOS 自动打包"
+  lane :HuaxiaTest_Debug_NotDingDing do |options|
+
+    scheme_name = "HuaxiaTest"
+
+    output_directory = "./debug/"
+
+    #increment_build_number
+
+    #version = get_version_number(xcodeproj: "Huaxia.xcodeproj", target: "#{scheme_name}")
+
+    buildNumber = get_build_number
+
+    output_name = "#{scheme_name}_#{buildNumber}_#{Time.now.strftime('%Y%m%d%H%M%S')}.ipa"
+
+    gym(scheme: scheme_name,
+            workspace: "Huaxia.xcworkspace",
+            include_bitcode: false,
+            configuration: "Debug",
+	    include_symbols: true,
+	    export_method: "development",
+	    output_directory: output_directory,
+	    build_path: output_directory,
+	    archive_path: output_directory,
+	    output_name: output_name)
+    branchName = options[:branchName]
+    jobName = options[:jobName]
+    changeLog = options[:changeLog]
+    answer = fir_cli api_token:"f31d19f9b7f2fcdcb7b0eba43c69225f", need_release_id: true
+ 
+    puts "上传后的结果：#{answer}"
+
+    download_url = "http://hey.appc01.com/#{answer[:short]}?release_id=#{answer[:release_id]}"
+
+    dingdingMsg = "Debug #{branchName} 下载:#{download_url} \n 修改日志:#{changeLog} \n"
+    puts "打包结束时，输出文案：#{dingdingMsg}"
+
+    fir_cli api_token:"f31d19f9b7f2fcdcb7b0eba43c69225f", changelog: dingdingMsg
+    
+  end
+
+  lane :HuaxiaTest_Debug do |options|
+
+    scheme_name = "HuaxiaTest"
+
+    output_directory = "./debug/"
+
+    #increment_build_number
+
+    #version = get_version_number(xcodeproj: "Huaxia.xcodeproj", target: "#{scheme_name}")
+
+    buildNumber = get_build_number
+
+    output_name = "#{scheme_name}_#{buildNumber}_#{Time.now.strftime('%Y%m%d%H%M%S')}.ipa"
+
+    gym(scheme: scheme_name,
+            workspace: "Huaxia.xcworkspace",
+            include_bitcode: false,
+            configuration: "Debug",
+	    include_symbols: true,
+	    export_method: "development",
+	    output_directory: output_directory,
+	    build_path: output_directory,
+	    archive_path: output_directory,
+	    output_name: output_name)
+    branchName = options[:branchName]
+    jobName = options[:jobName]
+    changeLog = options[:changeLog]
+    answer = fir_cli api_token:"f31d19f9b7f2fcdcb7b0eba43c69225f", need_release_id: true
+ 
+    puts "上传后的结果：#{answer}"
+
+    download_url = "https://hey.appc01.com/#{answer[:short]}?release_id=#{answer[:release_id]}"
+
+    dingdingMsg = "打包结果通知：Jenkins 打包成功。Debug 开发包。\n branchName:#{branchName}\n jobName:#{jobName}\n 下载二维码链接:#{download_url} \n 修改日志:#{changeLog} \n"
+    puts "打包结束时，输出文案：#{dingdingMsg}"
+
+    #fir_cli api_token:"f31d19f9b7f2fcdcb7b0eba43c69225f", dingtalk_at_all: true, #dingtalk_access_token:"2388fedbcb98263539d9dec5b0e4b625f7f8a84c3d6ae2bf33dbcded9862b3a0", #dingtalk_custom_message: dingdingMsg
+    
+    dingTalk_url = "https://oapi.dingtalk.com/robot/send?access_token=2388fedbcb98263539d9dec5b0e4b625f7f8a84c3d6ae2bf33dbcded9862b3a0"
+
+    # 构造消息格式
+    text = {
+      "at": {
+        "isAtAll": true
+      },
+      "text": {
+          "content": "#{dingdingMsg}"
+      }, 
+      "msgtype": "text"
+    }
+
+    puts "发送的钉钉消息：#{text} "
+
+    uri = URI.parse(dingTalk_url)
+    https = Net::HTTP.new(uri.host, uri.port)
+    https.use_ssl = true
+
+    request = Net::HTTP::Post.new(uri.request_uri)
+    request.add_field('Content-Type', 'application/json')
+    request.body = text.to_json
+
+    response = https.request(request)
+    puts "------------------------------"
+    puts "Response #{response.code} #{response.message}: #{response.body}"
+  end
+
+  lane :Huaxia_Release do |options|
+    scheme_name = "Huaxia"
+
+    output_directory = "./release/"
+
+    #increment_build_number
+
+    #version = get_version_number(xcodeproj: "Huaxia.xcodeproj", target: "#{scheme_name}")
+
+    buildNumber = get_build_number
+
+    output_name = "#{scheme_name}_#{buildNumber}_#{Time.now.strftime('%Y%m%d%H%M%S')}.ipa"
+
+    gym(scheme: scheme_name,
+            workspace: "Huaxia.xcworkspace",
+            include_bitcode: false,
+            configuration: "Release",
+	    include_symbols: true,
+	    export_method: "development",
+	    output_directory: output_directory,
+	    build_path: output_directory,
+	    archive_path: output_directory,
+	    output_name: output_name)
+    branchName = options[:branchName]
+    jobName = options[:jobName]
+    changeLog = options[:changeLog]
+    answer = fir_cli api_token:"f31d19f9b7f2fcdcb7b0eba43c69225f", need_release_id: true
+ 
+    puts "上传后的结果：#{answer}"
+
+    download_url = "https://hey.appc01.com/#{answer[:short]}?release_id=#{answer[:release_id]}"
+
+    dingdingMsg = "打包结果通知：Jenkins 打包成功。Release 线上包。\n branchName:#{branchName}\n jobName:#{jobName}\n 下载二维码链接:#{download_url} \n 修改日志:#{changeLog} \n"
+    puts "打包结束时，输出文案：#{dingdingMsg}"
+
+    #fir_cli api_token:"f31d19f9b7f2fcdcb7b0eba43c69225f", dingtalk_at_all: true, #dingtalk_access_token:"2388fedbcb98263539d9dec5b0e4b625f7f8a84c3d6ae2bf33dbcded9862b3a0", #dingtalk_custom_message: dingdingMsg
+    
+    dingTalk_url = "https://oapi.dingtalk.com/robot/send?access_token=2388fedbcb98263539d9dec5b0e4b625f7f8a84c3d6ae2bf33dbcded9862b3a0"
+
+    # 构造消息格式
+    text = {
+      "at": {
+        "isAtAll": true
+      },
+      "text": {
+          "content": "#{dingdingMsg}"
+      }, 
+      "msgtype": "text"
+    }
+
+    puts "发送的钉钉消息：#{text} "
+
+    uri = URI.parse(dingTalk_url)
+    https = Net::HTTP.new(uri.host, uri.port)
+    https.use_ssl = true
+
+    request = Net::HTTP::Post.new(uri.request_uri)
+    request.add_field('Content-Type', 'application/json')
+    request.body = text.to_json
+
+    response = https.request(request)
+    puts "------------------------------"
+    puts "Response #{response.code} #{response.message}: #{response.body}"
+  end
+
+  lane :Huaxia_AppStore do
+    build_app(scheme: "Huaxia",
+            workspace: "Huaxia.xcworkspace",
+            include_bitcode: false,
+            configuration: "Release",
+	    include_symbols: true,
+	    export_method: "app-store",
+	    output_directory: "~/Release/",
+	    build_path: "~/Release/",
+	    archive_path: "~/Release/")
+    branchName = options[:branchName]
+    jobName = options[:jobName]
+
+    answer = fir_cli api_token:"f31d19f9b7f2fcdcb7b0eba43c69225f", need_release_id: true
+ 
+    puts "上传后的结果：#{answer}"
+
+    download_url = "https://hey.appc01.com/#{answer[:short]}?release_id=#{answer[:release_id]}"
+
+    dingdingMsg = "打包结果通知：Jenkins 打包成功。Release branchName:#{branchName} jobName:#{jobName} 下载二维码链接:#{download_url}"
+    puts "打包结束时，输出文案：#{dingdingMsg}"
+
+    fir_cli api_token:"f31d19f9b7f2fcdcb7b0eba43c69225f", dingtalk_at_all: true, dingtalk_access_token:"2388fedbcb98263539d9dec5b0e4b625f7f8a84c3d6ae2bf33dbcded9862b3a0", dingtalk_custom_message: dingdingMsg
+  end
+
+end
