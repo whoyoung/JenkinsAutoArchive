@@ -15,10 +15,10 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
-### ios HuaxiaTest_Debug_NotDingDing
+### ios Project_Debug_NotDingDing
 
 ```sh
-[bundle exec] fastlane ios HuaxiaTest_Debug_NotDingDing
+[bundle exec] fastlane ios Project_Debug_NotDingDing
 ```
 
 iOS 自动打包
@@ -26,7 +26,7 @@ iOS 自动打包
 ### ios HuaxiaTest_Debug
 
 ```sh
-[bundle exec] fastlane ios HuaxiaTest_Debug
+[bundle exec] fastlane ios Project_Debug
 ```
 
 
@@ -34,7 +34,7 @@ iOS 自动打包
 ### ios Huaxia_Release
 
 ```sh
-[bundle exec] fastlane ios Huaxia_Release
+[bundle exec] fastlane ios Project_Release
 ```
 
 
@@ -42,7 +42,7 @@ iOS 自动打包
 ### ios Huaxia_AppStore
 
 ```sh
-[bundle exec] fastlane ios Huaxia_AppStore
+[bundle exec] fastlane ios Project_AppStore
 ```
 
 
