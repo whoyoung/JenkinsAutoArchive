@@ -17,22 +17,22 @@ default_platform(:ios)
 
 platform :ios do
   desc "iOS 自动打包"
-  lane :HuaxiaTest_Debug_NotDingDing do |options|
+  lane :Project_Debug_NotDingDing do |options|
 
-    scheme_name = "HuaxiaTest"
+    scheme_name = "Project"
 
     output_directory = "./debug/"
 
     #increment_build_number
 
-    #version = get_version_number(xcodeproj: "Huaxia.xcodeproj", target: "#{scheme_name}")
+    #version = get_version_number(xcodeproj: "Project.xcodeproj", target: "#{scheme_name}")
 
     buildNumber = get_build_number
 
     output_name = "#{scheme_name}_#{buildNumber}_#{Time.now.strftime('%Y%m%d%H%M%S')}.ipa"
 
     gym(scheme: scheme_name,
-            workspace: "Huaxia.xcworkspace",
+            workspace: "Project.xcworkspace",
             include_bitcode: false,
             configuration: "Debug",
 	    include_symbols: true,
@@ -44,7 +44,7 @@ platform :ios do
     branchName = options[:branchName]
     jobName = options[:jobName]
     changeLog = options[:changeLog]
-    answer = fir_cli api_token:"f31d19f9b7f2fcdcb7b0eba43c69225f", need_release_id: true
+    answer = fir_cli api_token:"xxxxxxxxx", need_release_id: true
  
     puts "上传后的结果：#{answer}"
 
@@ -53,26 +53,26 @@ platform :ios do
     dingdingMsg = "Debug #{branchName} 下载:#{download_url} \n 修改日志:#{changeLog} \n"
     puts "打包结束时，输出文案：#{dingdingMsg}"
 
-    fir_cli api_token:"f31d19f9b7f2fcdcb7b0eba43c69225f", changelog: dingdingMsg
+    fir_cli api_token:"xxxxxxxx", changelog: dingdingMsg
     
   end
 
-  lane :HuaxiaTest_Debug do |options|
+  lane :Project_Debug do |options|
 
-    scheme_name = "HuaxiaTest"
+    scheme_name = "Project"
 
     output_directory = "./debug/"
 
     #increment_build_number
 
-    #version = get_version_number(xcodeproj: "Huaxia.xcodeproj", target: "#{scheme_name}")
+    #version = get_version_number(xcodeproj: "Project.xcodeproj", target: "#{scheme_name}")
 
     buildNumber = get_build_number
 
     output_name = "#{scheme_name}_#{buildNumber}_#{Time.now.strftime('%Y%m%d%H%M%S')}.ipa"
 
     gym(scheme: scheme_name,
-            workspace: "Huaxia.xcworkspace",
+            workspace: "Project.xcworkspace",
             include_bitcode: false,
             configuration: "Debug",
 	    include_symbols: true,
@@ -84,7 +84,7 @@ platform :ios do
     branchName = options[:branchName]
     jobName = options[:jobName]
     changeLog = options[:changeLog]
-    answer = fir_cli api_token:"f31d19f9b7f2fcdcb7b0eba43c69225f", need_release_id: true
+    answer = fir_cli api_token:"xxxxxxxxxxx", need_release_id: true
  
     puts "上传后的结果：#{answer}"
 
@@ -93,9 +93,9 @@ platform :ios do
     dingdingMsg = "打包结果通知：Jenkins 打包成功。Debug 开发包。\n branchName:#{branchName}\n jobName:#{jobName}\n 下载二维码链接:#{download_url} \n 修改日志:#{changeLog} \n"
     puts "打包结束时，输出文案：#{dingdingMsg}"
 
-    #fir_cli api_token:"f31d19f9b7f2fcdcb7b0eba43c69225f", dingtalk_at_all: true, #dingtalk_access_token:"2388fedbcb98263539d9dec5b0e4b625f7f8a84c3d6ae2bf33dbcded9862b3a0", #dingtalk_custom_message: dingdingMsg
+    #fir_cli api_token:"xxxxxx", dingtalk_at_all: true, #dingtalk_access_token:"xxxxxxx", #dingtalk_custom_message: dingdingMsg
     
-    dingTalk_url = "https://oapi.dingtalk.com/robot/send?access_token=2388fedbcb98263539d9dec5b0e4b625f7f8a84c3d6ae2bf33dbcded9862b3a0"
+    dingTalk_url = "https://oapi.dingtalk.com/robot/send?access_token=xxxxxxxx"
 
     # 构造消息格式
     text = {
@@ -123,21 +123,21 @@ platform :ios do
     puts "Response #{response.code} #{response.message}: #{response.body}"
   end
 
-  lane :Huaxia_Release do |options|
-    scheme_name = "Huaxia"
+  lane :Project_Release do |options|
+    scheme_name = "Project"
 
     output_directory = "./release/"
 
     #increment_build_number
 
-    #version = get_version_number(xcodeproj: "Huaxia.xcodeproj", target: "#{scheme_name}")
+    #version = get_version_number(xcodeproj: "Project.xcodeproj", target: "#{scheme_name}")
 
     buildNumber = get_build_number
 
     output_name = "#{scheme_name}_#{buildNumber}_#{Time.now.strftime('%Y%m%d%H%M%S')}.ipa"
 
     gym(scheme: scheme_name,
-            workspace: "Huaxia.xcworkspace",
+            workspace: "Project.xcworkspace",
             include_bitcode: false,
             configuration: "Release",
 	    include_symbols: true,
@@ -149,7 +149,7 @@ platform :ios do
     branchName = options[:branchName]
     jobName = options[:jobName]
     changeLog = options[:changeLog]
-    answer = fir_cli api_token:"f31d19f9b7f2fcdcb7b0eba43c69225f", need_release_id: true
+    answer = fir_cli api_token:"xxxxxxx", need_release_id: true
  
     puts "上传后的结果：#{answer}"
 
@@ -158,9 +158,9 @@ platform :ios do
     dingdingMsg = "打包结果通知：Jenkins 打包成功。Release 线上包。\n branchName:#{branchName}\n jobName:#{jobName}\n 下载二维码链接:#{download_url} \n 修改日志:#{changeLog} \n"
     puts "打包结束时，输出文案：#{dingdingMsg}"
 
-    #fir_cli api_token:"f31d19f9b7f2fcdcb7b0eba43c69225f", dingtalk_at_all: true, #dingtalk_access_token:"2388fedbcb98263539d9dec5b0e4b625f7f8a84c3d6ae2bf33dbcded9862b3a0", #dingtalk_custom_message: dingdingMsg
+    #fir_cli api_token:"xxxxxx", dingtalk_at_all: true, #dingtalk_access_token:"xxxxxx", #dingtalk_custom_message: dingdingMsg
     
-    dingTalk_url = "https://oapi.dingtalk.com/robot/send?access_token=2388fedbcb98263539d9dec5b0e4b625f7f8a84c3d6ae2bf33dbcded9862b3a0"
+    dingTalk_url = "https://oapi.dingtalk.com/robot/send?access_token=xxxxx"
 
     # 构造消息格式
     text = {
@@ -188,9 +188,9 @@ platform :ios do
     puts "Response #{response.code} #{response.message}: #{response.body}"
   end
 
-  lane :Huaxia_AppStore do
-    build_app(scheme: "Huaxia",
-            workspace: "Huaxia.xcworkspace",
+  lane :Project_AppStore do
+    build_app(scheme: "Project",
+            workspace: "Project.xcworkspace",
             include_bitcode: false,
             configuration: "Release",
 	    include_symbols: true,
@@ -201,7 +201,7 @@ platform :ios do
     branchName = options[:branchName]
     jobName = options[:jobName]
 
-    answer = fir_cli api_token:"f31d19f9b7f2fcdcb7b0eba43c69225f", need_release_id: true
+    answer = fir_cli api_token:"xxxxxxx", need_release_id: true
  
     puts "上传后的结果：#{answer}"
 
@@ -210,7 +210,7 @@ platform :ios do
     dingdingMsg = "打包结果通知：Jenkins 打包成功。Release branchName:#{branchName} jobName:#{jobName} 下载二维码链接:#{download_url}"
     puts "打包结束时，输出文案：#{dingdingMsg}"
 
-    fir_cli api_token:"f31d19f9b7f2fcdcb7b0eba43c69225f", dingtalk_at_all: true, dingtalk_access_token:"2388fedbcb98263539d9dec5b0e4b625f7f8a84c3d6ae2bf33dbcded9862b3a0", dingtalk_custom_message: dingdingMsg
+    fir_cli api_token:"xxxxx", dingtalk_at_all: true, dingtalk_access_token:"xxxxx", dingtalk_custom_message: dingdingMsg
   end
 
 end
