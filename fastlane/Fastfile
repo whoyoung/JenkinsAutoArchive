@@ -83,7 +83,14 @@ platform :ios do
 	    output_name: output_name)
     branchName = options[:branchName]
     jobName = options[:jobName]
-    changeLog = options[:changeLog]
+    changeLog = options[:changeLog] 
+
+    # 截断字符，因为钉钉消息体有限制：{"errcode":460101,"errmsg":"description: body 大小不合法;solution:请保持大小在 20000bytes 以内;"}
+    if changeLog.length > 500
+      changeLog = changeLog[0,497]
+      changeLog = "#{changeLog}..."
+    end
+	  
     answer = fir_cli api_token:"xxxxxxxxxxx", need_release_id: true
  
     puts "上传后的结果：#{answer}"
@@ -149,6 +156,13 @@ platform :ios do
     branchName = options[:branchName]
     jobName = options[:jobName]
     changeLog = options[:changeLog]
+	  
+    # 截断字符，因为钉钉消息体有限制：{"errcode":460101,"errmsg":"description: body 大小不合法;solution:请保持大小在 20000bytes 以内;"}
+    if changeLog.length > 500
+      changeLog = changeLog[0,497]
+      changeLog = "#{changeLog}..."
+    end
+	  
     answer = fir_cli api_token:"xxxxxxx", need_release_id: true
  
     puts "上传后的结果：#{answer}"
